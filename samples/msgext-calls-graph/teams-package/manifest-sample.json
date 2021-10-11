@@ -25,7 +25,7 @@
   "accentColor": "#FFFFFF",
   "composeExtensions": [
     {
-      "botId": "203effce-859f-4c73-9180-06b9983a985c",
+      "botId": "<Bot ID>",
       "canUpdateConfiguration": true,
       "commands": [
         {
