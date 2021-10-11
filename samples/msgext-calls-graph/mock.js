@@ -1,6 +1,8 @@
 module.exports = {
-    "query": () => {
-        return [
+    "query": (searchQuery) => {
+
+        const q = searchQuery.toLowerCase();
+        const mockData = [
             {
                 "displayName": "Alex Wilber",
                 "givenName": "Alex",
@@ -67,5 +69,7 @@ module.exports = {
                 ]
             }
         ];
+        return mockData.filter(c => (c.givenName.toLowerCase().startsWith(q) ||
+                                     c.surname.toLowerCase().startsWith(q)));
     }
 }
