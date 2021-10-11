@@ -3,10 +3,11 @@ const { TeamsActivityHandler, CardFactory } = require('botbuilder');
 const images = [require('./images/userBlue48'),
                 require('./images/userGreen48'),
                 require('./images/userOrange48')];
-class ContactsBot extends TeamsActivityHandler {
+
+module.exports.ContactsBot =
+  class ContactsBot extends TeamsActivityHandler {
 
   // Triggers when the action is invoked either in the search box or message menu by a user
-
   async handleTeamsMessagingExtensionQuery(context, query) {
 
     const { name, value } = query.parameters[0];
@@ -82,5 +83,4 @@ class ContactsBot extends TeamsActivityHandler {
   }
 }
 
-module.exports.ContactsBot = ContactsBot;
 
