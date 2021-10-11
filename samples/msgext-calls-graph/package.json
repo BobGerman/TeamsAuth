@@ -1,13 +1,13 @@
 {
-  "name": "msteams-httpstatuscats",
+  "name": "msgext-calls-graph",
   "version": "1.0.0",
-  "description": "HTTP Status Cats app for MS Teams.",
+  "description": "Sample messaging extension for Microsoft Teams.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "botbuilder": "^4.10.0",
+    "botbuilder": "^4.14.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1"
   },
@@ -21,8 +21,7 @@
   "keywords": [
     "microsoft",
     "bot",
-    "teams",
-    "httpstatuscats"
+    "teams"
   ],
   "devDependencies": {
     "eslint": "^7.8.1"
