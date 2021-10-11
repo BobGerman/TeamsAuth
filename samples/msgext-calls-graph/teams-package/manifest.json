@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.7/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.7",
+  "version": "0.0.1",
+  "id": "ec312e0e-1e96-4e20-8c62-38d63b178122",
+  "packageName": "com.github.officedev.teamsauth.msgext-calls-graph",
+  "developer": {
+    "name": "M365 Developer Advocacy",
+    "websiteUrl": "https://microsoft.com.com",
+    "privacyUrl": "https://microsoft.com/privacy",
+    "termsOfUseUrl": "https://www.microsoft.com/legal/terms-of-use"
+  },
+  "icons": {
+    "color": "ContactSearch192.png",
+    "outline": "ContactSearch32.png"
+  },
+  "name": {
+    "short": "Contacts",
+    "full": ""
+  },
+  "description": {
+    "short": "Personal contacts",
+    "full": "Look up a contact and share in Microsoft Teams"
+  },
+  "accentColor": "#FFFFFF",
+  "composeExtensions": [
+    {
+      "botId": "203effce-859f-4c73-9180-06b9983a985c",
+      "canUpdateConfiguration": true,
+      "commands": [
+        {
+          "id": "httpLookup",
+          "type": "query",
+          "title": "Contacts",
+          "description": "Look up a contact and share in Microsoft Teams",
+          "initialRun": false,
+          "fetchTask": false,
+          "context": [
+            "commandBox",
+            "compose"
+          ],
+          "parameters": [
+            {
+              "name": "name",
+              "title": "Name",
+              "description": "Enter a contact name",
+              "inputType": "text"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": []
+}
