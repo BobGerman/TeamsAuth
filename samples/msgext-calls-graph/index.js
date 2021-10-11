@@ -13,7 +13,7 @@ const server = app.listen(process.env.PORT || 3978, () => {
 const { BotFrameworkAdapter } = require('botbuilder');
 
 // This bot's main dialog
-const { HttpCatsBot } = require('./bot');
+const { ContactsBot } = require('./bot');
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about how bots work.
@@ -46,7 +46,7 @@ const onTurnErrorHandler = async (context, error) => {
 adapter.onTurnError = onTurnErrorHandler;
 
 // Create the main dialog.
-const myBot = new HttpCatsBot();
+const myBot = new ContactsBot();
 
 // Messaging endpoint - Listen for incoming requests.
 app.post('/api/messages', (req, res) => {

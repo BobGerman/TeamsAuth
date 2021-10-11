@@ -1,84 +1,86 @@
-const httpstatus = require('./httpstatus');
+const contactsService = require('./mock');
 const { TeamsActivityHandler, CardFactory } = require('botbuilder');
+const images = [require('./images/userBlue48'),
+                require('./images/userGreen48'),
+                require('./images/userOrange48')];
+class ContactsBot extends TeamsActivityHandler {
 
-class HttpCatsBot extends TeamsActivityHandler {
-  
   // Triggers when the action is invoked either in the search box or message menu by a user
-  
+
   async handleTeamsMessagingExtensionQuery(context, query) {
 
-    const {name, value} = query.parameters[0];
-    
-    if(name !== 'name') { 
+    const { name, value } = query.parameters[0];
+
+    if (name !== 'name') {
       return;
     }
 
     console.log(`Looking up ${value}`);
-    
-    
-    // Defining the content - https://docs.microsoft.com/en-us/microsoftteams/platform/resources/messaging-extension-v3/search-extensions
-    // Using the preview property within the attachment object. The preview attachment can only be a Hero or Thumbnail card.
-    
-    const status = httpstatus[value];
-    const previewText = (status) ? `${value}: ${status}` : '[⚠️ Cannot find the status code]';
-    const previewImg = (status) ? `https://http.cat/${value}` : null;
-    const preview = CardFactory.heroCard(previewText, '', [{url: previewImg}]);
 
-    
-    // Adaptive Card for the content after click
-    
-    let content = {
-      type: 'TextBlock',
-      text: 'This is not a valid status code. Try again!'
+    const contacts = contactsService.query(value);
+
+    const attachments = [];
+    for (let c of contacts) {
+      const image = images[c.displayName.charCodeAt(0) % images.length];
+      const card = {
+        "type": "AdaptiveCard",
+        "body": [
+          {
+            "type": "ColumnSet",
+            "columns": [
+              {
+                "type": "Column",
+                "items": [
+                  {
+                    "type": "Image",
+                    "style": "Person",
+                    "url": image,
+                    "size": "Small"
+                  }
+                ],
+                "width": "auto"
+              },
+              {
+                "type": "Column",
+                "items": [
+                  {
+                    "type": "TextBlock",
+                    "weight": "Bolder",
+                    "text": c.displayName,
+                    "wrap": true
+                  },
+                  {
+                    "type": "TextBlock",
+                    "spacing": "None",
+                    "text": c.jobTitle,
+                    "isSubtle": true,
+                    "wrap": true
+                  }
+                ],
+                "width": "stretch"
+              }
+            ]
+          }
+        ],
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.3"
+      };
+      const resultCard = CardFactory.adaptiveCard(card);
+      const previewCard = CardFactory.thumbnailCard(c.displayName, [image]);
+      const attachment = { ...resultCard, preview: previewCard };
+      attachments.push(attachment);
     }
-    
-    if(status) {
-      content = {
-          type: 'Container',
-          items: [
-            {
-              type: 'TextBlock',
-              text: value,
-              size: 'large'
-            },
-            {
-              type: 'TextBlock',
-              text: status,
-              isSubtle: true,
-              wrap: true
-            },
-            {
-              type: 'Image',
-              url: `https://http.cat/${value}`, 
-              alt: 'cat',
-            }
-          ]
-        }
-    }
-    
-    const card = {
-      type: 'AdaptiveCard',
-      version: '1.0',
-      body: [
-        content
-      ],
-    };
-    
-    const adaptiveCard = CardFactory.adaptiveCard(card);
-    
-    const attachment = { ...adaptiveCard, preview};  
-    
 
     return {
       composeExtension: {
         type: 'result',
         attachmentLayout: 'list',
-        attachments: [attachment]
+        attachments: attachments
       }
     };
 
   }
 }
 
-module.exports.HttpCatsBot = HttpCatsBot;
+module.exports.ContactsBot = ContactsBot;
 
