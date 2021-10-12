@@ -1,8 +1,8 @@
+require('dotenv').config();
 const contactsService = require('./mock');
 const { TeamsActivityHandler, CardFactory } = require('botbuilder');
-const images = [require('./images/userBlue48'),
-                require('./images/userGreen48'),
-                require('./images/userOrange48')];
+
+const images = ['userBlue48.png', 'userGreen48.png', 'userOrange48.png'];
 
 module.exports.ContactsBot =
   class ContactsBot extends TeamsActivityHandler {
@@ -18,11 +18,14 @@ module.exports.ContactsBot =
 
     console.log(`Looking up ${value}`);
 
-    const contacts = contactsService.query(value);
+    const contacts = contactsService.query(context, value);
 
     const attachments = [];
     for (let c of contacts) {
-      const image = images[c.displayName.charCodeAt(0) % images.length];
+      // Select an image based on the first initial
+      const image = `https://${process.env.Hostname}/images/` +
+        images[c.displayName.charCodeAt(0) % images.length];
+      // Build the adaptive card to be used if the user selects this contact
       const card = {
         "type": "AdaptiveCard",
         "body": [
@@ -66,6 +69,7 @@ module.exports.ContactsBot =
         "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
         "version": "1.3"
       };
+      // Build the result card and thumbnail card and add them in an attachment
       const resultCard = CardFactory.adaptiveCard(card);
       const previewCard = CardFactory.thumbnailCard(c.displayName, [image]);
       const attachment = { ...resultCard, preview: previewCard };
@@ -79,7 +83,6 @@ module.exports.ContactsBot =
         attachments: attachments
       }
     };
-
   }
 }
 

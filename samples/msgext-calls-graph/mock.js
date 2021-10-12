@@ -1,5 +1,5 @@
 module.exports = {
-    "query": (searchQuery) => {
+    "query": (context, searchQuery) => {
 
         const q = searchQuery.toLowerCase();
         const mockData = [

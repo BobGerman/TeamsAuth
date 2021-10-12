@@ -45,3 +45,6 @@ app.post('/api/messages', (req, res) => {
     await myBot.run(context);
   });
 });
+
+// Serve static pages from /public
+app.use(express.static('public'));
